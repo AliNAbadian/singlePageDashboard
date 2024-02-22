@@ -1,31 +1,56 @@
-Simple Client-Side Router
-This is a simple implementation of a client-side router in JavaScript. It allows you to define routes for your web application and display different views based on the current URL path.
+# Simple SPA Router
 
-Installation
-There is no installation required for this router. Simply include the JavaScript file in your HTML document and call the router function to initialize it.
+This is a simple Single Page Application (SPA) router implemented in JavaScript. It enables navigation between different views without reloading the entire page.
 
-Usage
-To define a route, add an object to the routes array. The object should have a path property that specifies the URL path for the route and a view property that specifies the view to render for that path. For example:
+## Usage
 
-javascript
-Copy code
-const routes = [
-{ path: "/", view: Dashboard },
-{ path: "/posts", view: Posts },
-{ path: "/settings", view: Settings }
-];
-In the above example, the Dashboard, Posts, and Settings modules are imported from separate files. These modules should contain the code for rendering the corresponding views.
+1. Clone or download this repository.
 
-To navigate to a different route, call the navigateTo function with the URL path as the argument. For example:
+2. Include the `router.js` file in your project.
 
-scss
-Copy code
-navigateTo("/posts");
-This will update the URL path in the browser and render the Posts view.
+3. Define views for your application in separate files (`Dashboard.js`, `Posts.js`, `Settings.js`).
 
-The router function is called automatically when the DOMContentLoaded event is fired. It will render the view for the initial URL path.
+4. Use the `navigateTo(url)` function to navigate to different paths programmatically.
 
-The router also listens for the popstate event, which is fired when the user navigates to a different URL using the browser's back or forward buttons. When this event is fired, the router function is called to render the view for the new URL path.
+5. Initialize the router using the `router()` function.
 
-License
-This client-side router is released under the MIT License. See LICENSE for details.
+## Example
+
+```javascript
+import Dashboard from "./views/Dashboard.js";
+import Posts from "./views/Posts.js";
+import Settings from "./views/Settings.js";
+
+const navigateTo = (url) => {
+  history.pushState(null, null, url);
+  router();
+};
+
+const router = async () => {
+  const routes = [
+    { path: "/", view: Dashboard },
+    { path: "/posts", view: Posts },
+    { path: "/settings", view: Settings },
+  ];
+
+  const currentPath = location.pathname;
+
+  const { view } =
+    routes.find((route) => route.path === currentPath) || routes[0];
+  const content = new view();
+  document.querySelector("#app").innerHTML = await content.getHtml();
+};
+
+window.addEventListener("popstate", router);
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.addEventListener("click", (e) => {
+    if (e.target.matches("[data-link]")) {
+      e.preventDefault();
+      navigateTo(e.target.href);
+    }
+  });
+
+  router();
+});
+```
