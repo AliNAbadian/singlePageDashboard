@@ -54,3 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
   router();
 });
 ```
+
+### Notes
+
+1.  Views should have a getHtml() method returning the HTML content.
+2.  The router matches the current URL path to a defined route and renders the corresponding view.
+3.  Customize routes according to your application's needs.
