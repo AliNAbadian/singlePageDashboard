@@ -14,6 +14,8 @@ This is a simple Single Page Application (SPA) router implemented in JavaScript.
 
 5. Initialize the router using the `router()` function.
 
+6. Don't forget to run `npm i express` in Terminal.
+
 ## Example
 
 ```javascript
